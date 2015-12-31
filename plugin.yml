@@ -1,0 +1,11 @@
+name: ChopTreeW
+main: me.crafter.mc.choptreew.ChopTreeW
+author: connection_lost
+version: 1.0
+description: >
+             0w0
+commands:
+   chop:
+      permission: choptree.admin
+      usage: |
+         /template
