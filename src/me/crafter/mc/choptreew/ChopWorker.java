@@ -1,21 +1,27 @@
 package me.crafter.mc.choptreew;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 public class ChopWorker {
 	
-	// Check order: isLog -> isTool -> isTree
-	public BlockFace[][] blockfaces = {{BlockFace.UP}, 
+	public static BlockFace[][] logfaces = {{BlockFace.UP}, 
 			{BlockFace.UP, BlockFace.NORTH}, {BlockFace.UP, BlockFace.EAST}, {BlockFace.UP, BlockFace.SOUTH}, {BlockFace.UP, BlockFace.WEST},
 			{BlockFace.UP, BlockFace.NORTH_EAST}, {BlockFace.UP, BlockFace.SOUTH_EAST}, {BlockFace.UP, BlockFace.NORTH_WEST}, {BlockFace.UP, BlockFace.SOUTH_WEST},
-			{BlockFace.NORTH}, {BlockFace.EAST}, {BlockFace.WEST}, {BlockFace.SOUTH}};
+			{BlockFace.NORTH}, {BlockFace.EAST}, {BlockFace.WEST}, {BlockFace.SOUTH}, 
+			{BlockFace.NORTH_EAST}, {BlockFace.SOUTH_EAST}, {BlockFace.NORTH_WEST}, {BlockFace.SOUTH_WEST}};
+	public static BlockFace[] leaffaces = {BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH};
 	
-	public boolean isTree(Block block){
-		if (block == null) return false; // TODO - is it necessary?
+	public static boolean isTree(Block block){
 		if (!isLog(block)) return false;
 		Block nextblock = block.getRelative(BlockFace.SELF);
 		int searchlimit = 50;
@@ -28,10 +34,10 @@ public class ChopWorker {
 				searched.add(nextblock);
 				// Next log
 				boolean found = false;
-				for (BlockFace[] blockfacess : blockfaces){
+				for (BlockFace[] blockfacess : logfaces){
 					Block newblock = nextblock;
 					for (BlockFace blockfacesss : blockfacess){
-						newblock = nextblock.getRelative(blockfacesss);
+						newblock = newblock.getRelative(blockfacesss);
 					}
 					if (isLog(newblock)){
 						nextblock = newblock;
@@ -43,18 +49,56 @@ public class ChopWorker {
 			}
 			
 			// Fall to here means not more upper block
-			// TODO check search limit at least 2?
-			// TODO verify newblock is the new block
-			// TODO check newblock leaf
-			
-			
+			// nextblock is the current highest block
+			int leavescount = 0;
+			for (BlockFace leafface : leaffaces){
+				if (isLeaves(nextblock.getRelative(leafface))){
+					leavescount ++;
+				}
+			}
+			if (leavescount >= 2){
+				return true;
+			} else {
+				return false;
+			}
 		}
-		
-		
 		return false;
 	}
 	
-	public boolean isLog(Block block){
+	public static void chop(Block block){
+		// Already went through isTree, chop the tree.
+		Set<Block> logs = new HashSet<Block>();
+		Set<Block> logsundone = new HashSet<Block>();
+		logsundone.add(block);
+		while (logsundone.size() > 0){
+			Block log = logsundone.iterator().next();
+			logsundone.remove(log);
+			logs.add(log);
+			
+			for (BlockFace[] blockfacess : logfaces){
+				Block newblock = log;
+				for (BlockFace blockfacesss : blockfacess){
+					newblock = newblock.getRelative(blockfacesss);
+				}
+				if (isLog(newblock)){
+					if (!logs.contains(newblock) && !logsundone.contains(newblock)){
+						logsundone.add(newblock);
+					}
+				}
+			}
+			if (logsundone.size() + logs.size() > 200){
+				return;
+			}
+		}
+		List<Block> logsl = new ArrayList<Block>(logs);
+		Collections.sort(logsl, new LogSorter());
+		
+		ChopTask choptask = new ChopTask(logsl);
+		BukkitTask task = Bukkit.getScheduler().runTaskTimer(Bukkit.getPluginManager().getPlugin("ChopTreeW"), choptask, 0L, 2L);
+		choptask.feedId(task.getTaskId());
+	}
+	
+	public static boolean isLog(Block block){
 		switch (block.getType()){
 		case LOG:
 		case LOG_2:
@@ -64,7 +108,7 @@ public class ChopWorker {
 		}
 	}
 	
-	public boolean isLeaves(Block block){
+	public static boolean isLeaves(Block block){
 		switch (block.getType()){
 		case LEAVES:
 		case LEAVES_2:
@@ -72,6 +116,21 @@ public class ChopWorker {
 		default:
 			return false;
 		}
+	}
+	
+	public static boolean isLeavesOrVines(Block block){
+		switch (block.getType()){
+		case LEAVES:
+		case LEAVES_2:
+		case VINE:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	public static boolean isTool(ItemStack item){
+		return true;
 	}
 	
 	
