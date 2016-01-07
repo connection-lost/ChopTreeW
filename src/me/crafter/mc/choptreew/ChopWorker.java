@@ -134,7 +134,7 @@ public class ChopWorker {
 	}
 	
 	public static boolean checkPermission(Player p){
-		if (p.hasPermission("revcraft.c")){
+		if (p.hasPermission("choptree.chop")){
 			return true;
 		} else {
 			return false;
