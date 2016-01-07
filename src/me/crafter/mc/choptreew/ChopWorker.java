@@ -92,10 +92,13 @@ public class ChopWorker {
 			}
 		}
 		List<Block> logsl = new ArrayList<Block>(logs);
-		Collections.sort(logsl, new LogSorter());
-		
+		Collections.sort(logsl, new LogSorter(block));
 		ChopTask choptask = new ChopTask(logsl);
-		BukkitTask task = Bukkit.getScheduler().runTaskTimer(Bukkit.getPluginManager().getPlugin("ChopTreeW"), choptask, 0L, 2L);
+		
+		long speedo = 2L;
+		if (logsl.size() > 50) speedo = 1L;
+		
+		BukkitTask task = Bukkit.getScheduler().runTaskTimer(Bukkit.getPluginManager().getPlugin("ChopTreeW"), choptask, 0L, speedo);
 		choptask.feedId(task.getTaskId());
 	}
 	
