@@ -39,10 +39,10 @@ public class ChopTask implements Runnable{
 						Block relative = log.getRelative(x, y, z);
 						if (ChopWorker.isLeavesOrVines(relative)){
 							relative.breakNaturally();
+							relative.getWorld().spigot().playEffect(relative.getLocation(), Effect.TILE_BREAK, 18, 0, 0.3F, 0.3F, 0.3F, 0.12F, 8, 64);
 							if (!sounded){
 								sounded = true;
 								relative.getWorld().playSound(relative.getLocation(), Sound.DIG_GRASS, 0.12F, 0.9F);
-								relative.getWorld().spigot().playEffect(relative.getLocation(), Effect.TILE_BREAK, 18, 0, 0.3F, 0.3F, 0.3F, 0.12F, 8, 64);
 							}
 						}
 					}

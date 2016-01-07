@@ -9,6 +9,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -129,8 +130,22 @@ public class ChopWorker {
 		}
 	}
 	
+	public static boolean checkPermission(Player p){
+		if (p.hasPermission("revcraft.c")){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public static boolean isTool(ItemStack item){
-		return true;
+		if (item == null) return false;
+		switch (item.getType()){
+		case GOLD_AXE:
+			return true;
+		default:
+			return false;
+		}
 	}
 	
 	
