@@ -87,7 +87,7 @@ public class ChopWorker {
 					}
 				}
 			}
-			if (logsundone.size() + logs.size() > 200){
+			if (logsundone.size() + logs.size() > 500){
 				return;
 			}
 		}
