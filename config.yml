@@ -1,0 +1,10 @@
+heightlimit: 50
+loglimit: 500
+popleaves: 2
+sound: true
+popinterval: auto
+allowedtools:
+- 'WOOD_AXE'
+- 'IRON_AXE'
+- 'GOLD_AXE'
+- 'DIAMOND_AXE'
