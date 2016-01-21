@@ -29,13 +29,14 @@ public class ChopTask implements Runnable{
 			Block log = tochop.remove(0);
 			if (ChopWorker.isLog(log)){
 				log.breakNaturally();
-				log.getWorld().playSound(log.getLocation(), Sound.DIG_WOOD, 0.95F, 0.6F + Math.min(0.02F*(float)(at), 1.8F));
-				log.getWorld().spigot().playEffect(log.getLocation(), Effect.TILE_BREAK, 17, 0, 0.3F, 0.3F, 0.3F, 0.12F, 32, 64);
+				if (Storage.enableSound()) log.getWorld().playSound(log.getLocation(), Sound.DIG_WOOD, 0.95F, 0.6F + Math.min(0.02F*(float)(at), 1.8F));
+				if (Storage.enableEffect()) log.getWorld().spigot().playEffect(log.getLocation(), Effect.TILE_BREAK, 17, 0, 0.3F, 0.3F, 0.3F, 0.12F, 32, 64);
 			}
 			boolean sounded = false;
-			for (int x = -2; x <= 2; x ++){
-				for (int y = 0; y <= 2; y ++){
-					for (int z = -2; z <= 2; z ++){
+			int r = Storage.popLeaves();
+			for (int x = -r; x <= r; x ++){
+				for (int y = 0; y <= r; y ++){
+					for (int z = -r; z <= r; z ++){
 						Block relative = log.getRelative(x, y, z);
 						if (ChopWorker.isLeavesOrVines(relative)){
 							relative.breakNaturally();

@@ -3,9 +3,6 @@ loglimit: 500
 popleaves: 2
 sound: true
 effect: true;
-popinterval: auto
+popinterval: -1
 allowedtools:
-- 'WOOD_AXE'
-- 'IRON_AXE'
 - 'GOLD_AXE'
-- 'DIAMOND_AXE'

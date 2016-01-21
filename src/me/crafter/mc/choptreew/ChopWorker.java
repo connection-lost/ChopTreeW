@@ -25,7 +25,7 @@ public class ChopWorker {
 	public static boolean isTree(Block block){
 		if (!isLog(block)) return false;
 		Block nextblock = block.getRelative(BlockFace.SELF);
-		int searchlimit = 50;
+		int searchlimit = Storage.getHeightLimit();
 		List<Block> searched = new ArrayList<Block>();
 		while (searchlimit > 0){
 			// Decrement limit first
@@ -60,7 +60,17 @@ public class ChopWorker {
 			if (leavescount >= 2){
 				return true;
 			} else {
-				return false;
+				// Pine fix
+				for (BlockFace leafface : leaffaces){
+					if (isLeaves(nextblock.getRelative(BlockFace.UP).getRelative(leafface))){
+						leavescount ++;
+					}
+				}
+				if (leavescount >= 4){
+					return true;
+				} else {
+					return false;	
+				}
 			}
 		}
 		return false;
@@ -87,7 +97,7 @@ public class ChopWorker {
 					}
 				}
 			}
-			if (logsundone.size() + logs.size() > 500){
+			if (logsundone.size() + logs.size() > Storage.getLogLimit()){
 				return;
 			}
 		}
@@ -97,6 +107,9 @@ public class ChopWorker {
 		
 		long speedo = 2L;
 		if (logsl.size() > 50) speedo = 1L;
+		if (Storage.popInterval() != -1){
+			speedo = Storage.popInterval();
+		}
 		
 		BukkitTask task = Bukkit.getScheduler().runTaskTimer(Bukkit.getPluginManager().getPlugin("ChopTreeW"), choptask, 0L, speedo);
 		choptask.feedId(task.getTaskId());
@@ -143,12 +156,7 @@ public class ChopWorker {
 	
 	public static boolean isTool(ItemStack item){
 		if (item == null) return false;
-		switch (item.getType()){
-		case GOLD_AXE:
-			return true;
-		default:
-			return false;
-		}
+		return Storage.isAllowed(item);
 	}
 	
 	
