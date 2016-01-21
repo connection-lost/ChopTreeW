@@ -2,6 +2,7 @@ heightlimit: 50
 loglimit: 500
 popleaves: 2
 sound: true
+effect: true;
 popinterval: auto
 allowedtools:
 - 'WOOD_AXE'

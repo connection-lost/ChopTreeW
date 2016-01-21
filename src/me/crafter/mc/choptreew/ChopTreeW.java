@@ -10,6 +10,7 @@ public class ChopTreeW extends JavaPlugin {
 
 	public void onEnable(){
     	getServer().getPluginManager().registerEvents(this.pl, this);
+    	new Storage(this);
     }
 	
 	
