@@ -13,27 +13,27 @@ public class Storage {
 	}
 	
 	public static int getHeightLimit(){
-		return plugin.getConfig().getInt("heightlimit");
+		return plugin.getConfig().getInt("heightlimit", 50);
 	}
 	
 	public static int getLogLimit(){
-		return plugin.getConfig().getInt("loglimit");
+		return plugin.getConfig().getInt("loglimit", 500);
 	}
 	
 	public static int popLeaves(){
-		return plugin.getConfig().getInt("popleaves");
+		return plugin.getConfig().getInt("popleaves", 2);
 	}
 	
 	public static boolean enableSound(){
-		return plugin.getConfig().getBoolean("sound");
+		return plugin.getConfig().getBoolean("sound", true);
 	}
 	
 	public static boolean enableEffect(){
-		return plugin.getConfig().getBoolean("effect");
+		return plugin.getConfig().getBoolean("effect", true);
 	}
 	
 	public static int popInterval(){
-		return plugin.getConfig().getInt("popinterval");
+		return plugin.getConfig().getInt("popinterval", -1);
 	}
 	
 	public static boolean isAllowed(ItemStack item){

@@ -2,7 +2,7 @@ heightlimit: 50
 loglimit: 500
 popleaves: 2
 sound: true
-effect: true;
+effect: true
 popinterval: -1
 allowedtools:
 - 'GOLD_AXE'
