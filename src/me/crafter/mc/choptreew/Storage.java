@@ -17,7 +17,7 @@ public class Storage {
 	}
 	
 	public static int getLogLimit(){
-		return plugin.getConfig().getInt("heightlimit");
+		return plugin.getConfig().getInt("loglimit");
 	}
 	
 	public static int popLeaves(){
