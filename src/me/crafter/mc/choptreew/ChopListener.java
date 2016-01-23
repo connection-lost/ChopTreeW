@@ -11,7 +11,8 @@ public class ChopListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onChopTree(BlockBreakEvent event){
 		if (event.isCancelled()) return;
-		if (ChopWorker.isLog(event.getBlock()) && ChopWorker.isTool(event.getPlayer().getItemInHand()) && ChopWorker.isTree(event.getBlock())){
+		if (ChopWorker.isLog(event.getBlock()) && ChopWorker.isTool(event.getPlayer().getItemInHand())
+				&&ChopWorker.checkPermission(event.getPlayer()) && ChopWorker.isTree(event.getBlock())){
 			ChopWorker.chop(event.getBlock());
 		}
 	}
