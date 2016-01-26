@@ -109,7 +109,7 @@ public class ChopWorker {
 		if (logsl.size() > 50) speedo = 1L;
 		if (Storage.popInterval() > 0){
 			speedo = Storage.popInterval();
-		} else if (speedo == 0){
+		} else if (Storage.popInterval() == 0){
 			choptask.setInstant(true);
 		}
 		

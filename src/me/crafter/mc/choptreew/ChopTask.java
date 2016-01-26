@@ -29,38 +29,47 @@ public class ChopTask implements Runnable{
 	
 	@Override
 	public void run() {
-		do {
-			at ++;
+		if (instant){
+			while (tochop.size() > 0){
+				chop();
+			}
+			Bukkit.getScheduler().cancelTask(taskId);
+			return;
+		} else {
 			if (tochop.size() > 0){
-				Block log = tochop.remove(0);
-				if (ChopWorker.isLog(log)){
-					log.breakNaturally();
-					if (Storage.enableSound()) log.getWorld().playSound(log.getLocation(), Sound.DIG_WOOD, 0.95F, 0.6F + Math.min(0.02F*(float)(at), 1.8F));
-					if (Storage.enableEffect()) log.getWorld().spigot().playEffect(log.getLocation(), Effect.TILE_BREAK, 17, 0, 0.3F, 0.3F, 0.3F, 0.12F, 32, 64);
-				}
-				boolean sounded = false;
-				int r = Storage.popLeaves();
-				for (int x = -r; x <= r; x ++){
-					for (int y = 0; y <= r; y ++){
-						for (int z = -r; z <= r; z ++){
-							Block relative = log.getRelative(x, y, z);
-							if (ChopWorker.isLeavesOrVines(relative)){
-								relative.breakNaturally();
-								relative.getWorld().spigot().playEffect(relative.getLocation(), Effect.TILE_BREAK, 18, 0, 0.3F, 0.3F, 0.3F, 0.12F, 8, 64);
-								if (!sounded){
-									sounded = true;
-									relative.getWorld().playSound(relative.getLocation(), Sound.DIG_GRASS, 0.12F, 0.9F);
-								}
-							}
-						}
-					}
-				}
+				chop();
 			} else {
 				Bukkit.getScheduler().cancelTask(taskId);
 				return;
 			}
-		} while (instant);
-		
+		}
+	}
+	
+	public void chop(){
+		at ++;
+		Block log = tochop.remove(0);
+		if (ChopWorker.isLog(log)){
+			log.breakNaturally();
+			if (Storage.enableSound()) log.getWorld().playSound(log.getLocation(), Sound.DIG_WOOD, 0.95F, 0.6F + Math.min(0.02F*(float)(at), 1.8F));
+			if (Storage.enableEffect()) log.getWorld().spigot().playEffect(log.getLocation(), Effect.TILE_BREAK, 17, 0, 0.3F, 0.3F, 0.3F, 0.12F, 32, 64);
+		}
+		boolean sounded = false;
+		int r = Storage.popLeaves();
+		for (int x = -r; x <= r; x ++){
+			for (int y = 0; y <= r; y ++){
+				for (int z = -r; z <= r; z ++){
+					Block relative = log.getRelative(x, y, z);
+					if (ChopWorker.isLeavesOrVines(relative)){
+						relative.breakNaturally();
+						relative.getWorld().spigot().playEffect(relative.getLocation(), Effect.TILE_BREAK, 18, 0, 0.3F, 0.3F, 0.3F, 0.12F, 8, 64);
+						if (!sounded){
+							sounded = true;
+							relative.getWorld().playSound(relative.getLocation(), Sound.DIG_GRASS, 0.12F, 0.9F);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 }
