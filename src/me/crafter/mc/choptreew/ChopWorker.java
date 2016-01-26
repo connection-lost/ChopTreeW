@@ -9,6 +9,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -76,8 +77,7 @@ public class ChopWorker {
 		return false;
 	}
 	
-	public static void chop(Block block){
-		// Already went through isTree, chop the tree.
+	public static List<Block> getLogsToPop(Block block){
 		Set<Block> logs = new HashSet<Block>();
 		Set<Block> logsundone = new HashSet<Block>();
 		logsundone.add(block);
@@ -98,10 +98,15 @@ public class ChopWorker {
 				}
 			}
 			if (logsundone.size() + logs.size() > Storage.getLogLimit()){
-				return;
+				return new ArrayList<Block>();
 			}
 		}
 		List<Block> logsl = new ArrayList<Block>(logs);
+		return logsl;
+	}
+	
+	public static void pop(List<Block> logsl, Block block){
+		if (logsl.isEmpty()) return;
 		Collections.sort(logsl, new LogSorter(block));
 		ChopTask choptask = new ChopTask(logsl);
 		
@@ -160,6 +165,41 @@ public class ChopWorker {
 	public static boolean isTool(ItemStack item){
 		if (item == null) return false;
 		return Storage.isAllowed(item);
+	}
+	
+	public static boolean checkDurability(ItemStack item, int logs){
+		if (item.getType().getMaxDurability() == 0) return true;
+		short extradurability = extraDurability(item, logs);
+		short itemcanhandle = itemCanHandle(item);
+		if (isDurabilityOk(itemcanhandle, extradurability)){
+			applyDurability(item, extradurability);
+			return true;
+		}
+		return false;
+	}
+	
+	public static short itemCanHandle(ItemStack item){
+		return (short) (item.getType().getMaxDurability() - item.getDurability());
+	}
+	
+	public static short extraDurability(ItemStack item, int logs){
+		if (Storage.moreDamageToTools() <= 0.001D) return 0;
+		int durability = logs;
+		if (Storage.considerToolEnchantment()){
+			if (item.getEnchantments().containsKey(Enchantment.DURABILITY)){
+				durability /= item.getEnchantmentLevel(Enchantment.DURABILITY) + 1;
+			}
+		}
+		return (short) durability;
+	}
+	
+	public static boolean isDurabilityOk(short item, short amount){
+		if (Storage.interruptIfToolWillBreak() && item <= amount) return false;
+		else return true;
+	}
+	
+	public static void applyDurability(ItemStack item, short amount){
+		item.setDurability((short)(item.getDurability() + amount));
 	}
 	
 	

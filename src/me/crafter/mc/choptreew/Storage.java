@@ -32,6 +32,18 @@ public class Storage {
 		return plugin.getConfig().getBoolean("effect", true);
 	}
 	
+	public static double moreDamageToTools(){
+		return plugin.getConfig().getDouble("moredamagetotools", 0D);
+	}
+	
+	public static boolean interruptIfToolWillBreak(){
+		return plugin.getConfig().getBoolean("interruptiftoolwillbreak", true);
+	}
+	
+	public static boolean considerToolEnchantment(){
+		return plugin.getConfig().getBoolean("considertoolenchantment", true);
+	}
+	
 	public static int popInterval(){
 		return plugin.getConfig().getInt("popinterval", -1);
 	}

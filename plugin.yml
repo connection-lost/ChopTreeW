@@ -5,7 +5,7 @@ version: 1.2
 description: >
              0w0
 commands:
-   chop:
+   choptree:
       permission: choptree.admin
       usage: |
-         /template
+         /choptree
