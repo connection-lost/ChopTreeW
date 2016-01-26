@@ -36,8 +36,10 @@ public class Storage {
 		return plugin.getConfig().getInt("popinterval", -1);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static boolean isAllowed(ItemStack item){
-		return plugin.getConfig().getList("allowedtools").contains(item.getType().name());
+		return (plugin.getConfig().getList("allowedtools").contains(item.getType().name()) ||
+				plugin.getConfig().getList("allowedtools").contains(String.valueOf(item.getType().getId())));
 	}
 
 }
