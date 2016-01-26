@@ -107,11 +107,14 @@ public class ChopWorker {
 		
 		long speedo = 2L;
 		if (logsl.size() > 50) speedo = 1L;
-		if (Storage.popInterval() != -1){
+		if (Storage.popInterval() > 0){
 			speedo = Storage.popInterval();
+		} else if (speedo == 0){
+			choptask.setInstant(true);
 		}
 		
 		BukkitTask task = Bukkit.getScheduler().runTaskTimer(Bukkit.getPluginManager().getPlugin("ChopTreeW"), choptask, 0L, speedo);
+		
 		choptask.feedId(task.getTaskId());
 	}
 	
