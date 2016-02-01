@@ -6,6 +6,6 @@ description: >
              0w0
 commands:
    choptree:
-      permission: choptree.admin
+      permission: choptree.chop
       usage: |
          /choptree

@@ -17,7 +17,8 @@ public class ChopListener implements Listener {
 		if (event.isCancelled()) return;
 		ItemStack item = event.getPlayer().getItemInHand();
 		if (ChopWorker.isLog(event.getBlock()) && ChopWorker.isTool(item)
-				&&ChopWorker.checkPermission(event.getPlayer()) && ChopWorker.isTree(event.getBlock())){
+				&& ChopWorker.checkPermission(event.getPlayer()) && !Storage.isOff(event.getPlayer())
+				&& ChopWorker.isTree(event.getBlock())){
 			Block block = event.getBlock();
 			List<Block> logsl = ChopWorker.getLogsToPop(block);
 			if (logsl.size() == 0) return;
