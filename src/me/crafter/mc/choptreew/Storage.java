@@ -62,6 +62,10 @@ public class Storage {
 		return plugin.getConfig().getInt("popinterval", -1);
 	}
 	
+	public static int autoReplant(){
+		return plugin.getConfig().getInt("autoreplant", -1);
+	}
+	
 	public static boolean isOff(Player p){
 		return off.contains(p.getName());
 	}

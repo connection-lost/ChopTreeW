@@ -24,7 +24,9 @@ public class ChopListener implements Listener {
 			if (logsl.size() == 0) return;
 			int logsamount = logsl.size();
 			if (ChopWorker.checkDurability(event.getPlayer().getItemInHand(), logsamount)){
+				logsl.add(0, event.getBlock());
 				ChopWorker.pop(logsl, block);
+				event.setCancelled(true);
 				if (item.getDurability() > item.getType().getMaxDurability()){
 					event.getPlayer().setItemInHand(null);
 				}

@@ -7,6 +7,7 @@ popinterval: -1
 moredamagetotools: 0
 interruptiftoolwillbreak: true
 considertoolenchantment: true
+autoreplant: -1
 allowedtools:
 - 'GOLD_AXE'
 - 'WOOD_AXE'
