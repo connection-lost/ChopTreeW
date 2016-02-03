@@ -11,4 +11,5 @@ allowedtools:
 - 'GOLD_AXE'
 - 'WOOD_AXE'
 - 'STONE_AXE'
+- 'IRON_AXE'
 - 'DIAMOND_AXE'
