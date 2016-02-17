@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -15,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 public class ChopWorker {
+	
+	static Random random = new Random();
 	
 	public static BlockFace[][] logfaces = {{BlockFace.UP}, 
 			{BlockFace.UP, BlockFace.NORTH}, {BlockFace.UP, BlockFace.EAST}, {BlockFace.UP, BlockFace.SOUTH}, {BlockFace.UP, BlockFace.WEST},
@@ -187,7 +190,13 @@ public class ChopWorker {
 		int durability = logs;
 		if (Storage.considerToolEnchantment()){
 			if (item.getEnchantments().containsKey(Enchantment.DURABILITY)){
-				durability /= item.getEnchantmentLevel(Enchantment.DURABILITY) + 1;
+				float durabilityf = ((float)durability) / (item.getEnchantmentLevel(Enchantment.DURABILITY) + 1);
+				float probability = durabilityf - (int)durabilityf;
+				if (random.nextFloat() < probability){
+					durability = (int)durabilityf + 1;
+				} else {
+					durability = (int)durabilityf;
+				}
 			}
 		}
 		return (short) durability;
