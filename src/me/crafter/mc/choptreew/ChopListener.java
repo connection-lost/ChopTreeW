@@ -15,7 +15,7 @@ public class ChopListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onChopTree(BlockBreakEvent event){
 		if (event.isCancelled()) return;
-		ItemStack item = event.getPlayer().getItemInHand();
+		ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
 		if (ChopWorker.isLog(event.getBlock()) && ChopWorker.isTool(item)
 				&& ChopWorker.checkPermission(event.getPlayer()) && !Storage.isOff(event.getPlayer())
 				&& ChopWorker.isTree(event.getBlock())){
@@ -23,12 +23,12 @@ public class ChopListener implements Listener {
 			List<Block> logsl = ChopWorker.getLogsToPop(block);
 			if (logsl.size() == 0) return;
 			int logsamount = logsl.size();
-			if (ChopWorker.checkDurability(event.getPlayer().getItemInHand(), logsamount)){
+			if (ChopWorker.checkDurability(event.getPlayer().getInventory().getItemInMainHand(), logsamount)){
 				logsl.add(0, event.getBlock());
 				ChopWorker.pop(logsl, block);
 				event.setCancelled(true);
 				if (item.getDurability() > item.getType().getMaxDurability()){
-					event.getPlayer().setItemInHand(null);
+					event.getPlayer().getInventory().setItemInMainHand(null);
 				}
 			} else {
 			}
